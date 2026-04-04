@@ -43,4 +43,18 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { getProfile, updateProfile };
+// @desc    Get any user's public profile by ID
+// @route   GET /api/profile/:id
+const getPublicProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ user: user.toJSON() });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { getProfile, updateProfile, getPublicProfile };

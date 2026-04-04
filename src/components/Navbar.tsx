@@ -160,13 +160,13 @@ export function Navbar() {
               )}
             </div>
 
-            <div className="ml-2 flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5">
+            <Link to="/profile" className="ml-2 flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 hover:bg-secondary/80 transition-colors cursor-pointer">
               <div className="flex h-6 w-6 items-center justify-center rounded-full gradient-primary text-xs font-medium text-primary-foreground">
                 {user.name.charAt(0)}
               </div>
               <span className="text-sm font-medium">{user.name}</span>
               <Badge variant="outline" className="text-[10px] capitalize">{user.role}</Badge>
-            </div>
+            </Link>
             <Button variant="ghost" size="icon" onClick={() => { logout(); navigate("/"); }}>
               <LogOut className="h-4 w-4" />
             </Button>

@@ -12,6 +12,7 @@ import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
 import Dashboard from "./pages/Dashboard";
 import Messages from "./pages/Messages";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { LogoIcon } from "@/components/Logo";
 import { useEffect } from "react";
@@ -50,6 +51,8 @@ function AppInner() {
         <Route path="/jobs/:id" element={<JobDetail />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:id" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

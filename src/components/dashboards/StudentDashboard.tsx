@@ -165,7 +165,9 @@ export default function StudentDashboard() {
         <Link to="/jobs">
           <Button variant="outline" className="gap-2"><Bookmark className="h-4 w-4" /> Browse Jobs</Button>
         </Link>
-        <Button variant="outline" className="gap-2"><FileText className="h-4 w-4" /> Edit Profile</Button>
+        <Link to="/profile">
+          <Button variant="outline" className="gap-2"><FileText className="h-4 w-4" /> Edit Profile</Button>
+        </Link>
       </div>
 
       {/* ── View All Applications Dialog ── */}

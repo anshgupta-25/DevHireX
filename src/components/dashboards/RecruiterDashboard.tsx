@@ -3,8 +3,9 @@ import { StatCard } from "@/components/StatCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Users, UserCheck, Calendar, Plus, Loader2, Bell } from "lucide-react";
+import { Briefcase, Users, UserCheck, Calendar, Plus, Loader2, Bell, MessageSquare } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "@/lib/api";
 import { getSocket } from "@/lib/socket";
 import type { Job, Application, Notification } from "@/lib/types";
@@ -38,6 +39,7 @@ const statusTransitions: Record<string, string[]> = {
 
 export default function RecruiterDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [myJobs, setMyJobs] = useState<Job[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -363,16 +365,24 @@ export default function RecruiterDashboard() {
               </div>
 
               <div className="mt-8 flex gap-3">
-                <Button variant="outline" className="flex-1 gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 gap-2"
+                  onClick={() => {
+                    setSelectedApp(null);
+                    navigate(`/profile/${selectedApp.studentId}`);
+                  }}
+                >
                   <Users className="h-4 w-4" /> View Profile
                 </Button>
-                <Button variant="outline" className="flex-1 gap-2" onClick={() => {
-                   toast({
-                    title: "Coming Soon",
-                    description: "Direct messaging with candidates will be available soon!",
-                  });
-                }}>
-                  <Calendar className="h-4 w-4" /> Schedule Call
+                <Button 
+                  className="flex-1 gap-2 gradient-primary border-0 text-primary-foreground"
+                  onClick={() => {
+                    setSelectedApp(null);
+                    navigate(`/messages?contact=${selectedApp.studentId}`);
+                  }}
+                >
+                  <MessageSquare className="h-4 w-4" /> Message
                 </Button>
               </div>
             </div>
