@@ -2,11 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, MessageSquare, LogOut, LayoutDashboard } from "lucide-react";
+import { Bell, MessageSquare, LogOut, LayoutDashboard, User as UserIcon, ChevronDown } from "lucide-react";
 import { LogoIcon } from "@/components/Logo";
 import { useState, useEffect, useRef } from "react";
 import api from "@/lib/api";
 import { getSocket } from "@/lib/socket";
+import { getUploadUrl } from "@/lib/uploads";
 import type { Notification } from "@/lib/types";
 
 export function Navbar() {
@@ -14,7 +15,9 @@ export function Navbar() {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   // Fetch notifications
   useEffect(() => {
@@ -54,11 +57,14 @@ export function Navbar() {
     };
   }, [isAuthenticated, user?.id]);
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setShowDropdown(false);
+      }
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target as Node)) {
+        setShowProfileMenu(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -160,16 +166,63 @@ export function Navbar() {
               )}
             </div>
 
-            <Link to="/profile" className="ml-2 flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 hover:bg-secondary/80 transition-colors cursor-pointer">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full gradient-primary text-xs font-medium text-primary-foreground">
-                {user.name.charAt(0)}
-              </div>
-              <span className="text-sm font-medium">{user.name}</span>
-              <Badge variant="outline" className="text-[10px] capitalize">{user.role}</Badge>
-            </Link>
-            <Button variant="ghost" size="icon" onClick={() => { logout(); navigate("/"); }}>
-              <LogOut className="h-4 w-4" />
-            </Button>
+            {/* Profile Avatar Dropdown */}
+            <div className="relative ml-2" ref={profileMenuRef}>
+              <button
+                onClick={() => setShowProfileMenu((prev) => !prev)}
+                className="flex items-center gap-2 rounded-full bg-secondary/70 pl-1 pr-3 py-1 hover:bg-secondary transition-all cursor-pointer border border-border/30"
+              >
+                {user.avatar ? (
+                  <img
+                    src={getUploadUrl(user.avatar)}
+                    alt={user.name}
+                    className="h-7 w-7 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
+                ) : (
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full gradient-primary text-xs font-bold text-primary-foreground shadow-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-sm font-medium max-w-[100px] truncate">{user.name}</span>
+                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+              </button>
+
+              {showProfileMenu && (
+                <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border/50 bg-card shadow-lg overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  {/* User info header */}
+                  <div className="px-4 py-3 border-b border-border/30 bg-secondary/30">
+                    <p className="text-sm font-semibold truncate">{user.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email || user.role}</p>
+                  </div>
+
+                  {/* Menu items */}
+                  <div className="py-1">
+                    <button
+                      onClick={() => { setShowProfileMenu(false); navigate("/profile"); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-secondary/50 transition-colors text-left"
+                    >
+                      <UserIcon className="h-4 w-4 text-muted-foreground" /> My Profile
+                    </button>
+                    <button
+                      onClick={() => { setShowProfileMenu(false); navigate("/dashboard"); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-secondary/50 transition-colors text-left"
+                    >
+                      <LayoutDashboard className="h-4 w-4 text-muted-foreground" /> Dashboard
+                    </button>
+                  </div>
+
+                  {/* Logout */}
+                  <div className="border-t border-border/30 py-1">
+                    <button
+                      onClick={() => { setShowProfileMenu(false); logout(); navigate("/"); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                    >
+                      <LogOut className="h-4 w-4" /> Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <div className="flex items-center gap-2">

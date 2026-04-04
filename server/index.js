@@ -14,6 +14,8 @@ const profileRoutes = require("./routes/profile");
 const messageRoutes = require("./routes/messages");
 const notificationRoutes = require("./routes/notifications");
 const adminRoutes = require("./routes/admin");
+const uploadRoutes = require("./routes/upload");
+const path = require("path");
 
 
 const app = express();
@@ -47,6 +49,10 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/upload", uploadRoutes);
+
+// Serve uploaded files as static
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Health check
 app.get("/api/health", (req, res) => {

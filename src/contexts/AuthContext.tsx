@@ -11,6 +11,7 @@ interface AuthContextType {
   signup: (name: string, email: string, password: string, role: UserRole, company?: string) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
+  updateUser: (updates: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -26,6 +27,7 @@ const mapUser = (u: any): User => ({
   experience: u.experience || "",
   company: u.company || "",
   avatar: u.avatar || "",
+  resume: u.resume || "",
   online: u.online || false,
 });
 
@@ -109,8 +111,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Role switching is not supported with real auth
   }, []);
 
+  const updateUser = useCallback((updates: Partial<User>) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const updated = { ...prev, ...updates };
+      storage.setItem("devhirex_user", JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, signup, logout, switchRole }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, signup, logout, switchRole, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
