@@ -139,4 +139,17 @@ const getContacts = async (req, res) => {
   }
 };
 
-module.exports = { getMessages, sendMessage, getContacts };
+const getUnreadCount = async (req, res) => {
+  try {
+    const unreadCount = await Message.countDocuments({
+      receiverId: req.user._id,
+      read: false,
+    });
+    res.json({ unreadCount });
+  } catch (error) {
+    console.error("Get unread count error:", error);
+    res.status(500).json({ message: "Server error fetching unread count" });
+  }
+};
+
+module.exports = { getMessages, sendMessage, getContacts, getUnreadCount };

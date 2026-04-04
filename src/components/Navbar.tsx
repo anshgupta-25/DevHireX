@@ -16,21 +16,26 @@ export function Navbar() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
-  // Fetch notifications
+  // Fetch notifications and unread messages count
   useEffect(() => {
     if (!isAuthenticated) return;
-    const fetchNotifs = async () => {
+    const fetchData = async () => {
       try {
-        const res = await api.get("/api/notifications");
-        setNotifications(res.data);
+        const [notifRes, msgRes] = await Promise.all([
+          api.get("/api/notifications"),
+          api.get("/api/messages/unread-count").catch(() => ({ data: { unreadCount: 0 } }))
+        ]);
+        setNotifications(notifRes.data);
+        setUnreadMessages(msgRes.data.unreadCount || 0);
       } catch {
         // ignore
       }
     };
-    fetchNotifs();
+    fetchData();
   }, [isAuthenticated]);
 
   // Real-time notifications via socket
@@ -51,9 +56,16 @@ export function Navbar() {
         ...prev,
       ]);
     };
+    const handleNewMessage = () => {
+      if (!window.location.pathname.includes('/messages')) {
+        setUnreadMessages((prev) => prev + 1);
+      }
+    };
     socket.on("notification", handleNotif);
+    socket.on("newMessage", handleNewMessage);
     return () => {
       socket.off("notification", handleNotif);
+      socket.off("newMessage", handleNewMessage);
     };
   }, [isAuthenticated, user?.id]);
 
@@ -107,9 +119,14 @@ export function Navbar() {
               </Button>
             </Link>
             {user.role !== "admin" && (
-              <Link to="/messages">
+              <Link to="/messages" onClick={() => setUnreadMessages(0)}>
                 <Button variant="ghost" size="icon" className="relative">
                   <MessageSquare className="h-4 w-4" />
+                  {unreadMessages > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] text-destructive-foreground">
+                      {unreadMessages > 9 ? "9+" : unreadMessages}
+                    </span>
+                  )}
                 </Button>
               </Link>
             )}
@@ -170,29 +187,37 @@ export function Navbar() {
             <div className="relative ml-2" ref={profileMenuRef}>
               <button
                 onClick={() => setShowProfileMenu((prev) => !prev)}
-                className="flex items-center gap-2 rounded-full bg-secondary/70 pl-1 pr-3 py-1 hover:bg-secondary transition-all cursor-pointer border border-border/30"
+                className="flex items-center gap-1.5 rounded-full bg-secondary/70 p-1 pr-2.5 hover:bg-secondary transition-all cursor-pointer border border-border/30"
               >
                 {user.avatar ? (
                   <img
                     src={getUploadUrl(user.avatar)}
                     alt={user.name}
-                    className="h-7 w-7 rounded-full object-cover border-2 border-white shadow-sm"
+                    className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
                   />
                 ) : (
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full gradient-primary text-xs font-bold text-primary-foreground shadow-sm">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full gradient-primary text-sm font-bold text-primary-foreground shadow-sm">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="text-sm font-medium max-w-[100px] truncate">{user.name}</span>
-                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                <ChevronDown className="h-4 w-4 text-muted-foreground stroke-[3] ml-0.5" />
               </button>
 
               {showProfileMenu && (
                 <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border/50 bg-card shadow-lg overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   {/* User info header */}
                   <div className="px-4 py-3 border-b border-border/30 bg-secondary/30">
-                    <p className="text-sm font-semibold truncate">{user.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user.email || user.role}</p>
+                    <p className="text-sm font-semibold flex items-center justify-between mb-0.5">
+                      <span className="truncate">{user.name}</span>
+                      <span className={`ml-2 text-[10px] px-2 py-0.5 rounded-full font-medium capitalize border shrink-0 ${
+                        user.role === 'student' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
+                        user.role === 'recruiter' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                        'bg-purple-100 text-purple-700 border-purple-200'
+                      }`}>
+                        {user.role}
+                      </span>
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                   </div>
 
                   {/* Menu items */}
