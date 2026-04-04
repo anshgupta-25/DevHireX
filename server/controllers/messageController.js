@@ -29,7 +29,7 @@ const getMessages = async (req, res) => {
       senderName: msg.senderId.name,
       receiverId: msg.receiverId.toString(),
       content: msg.text,
-      timestamp: msg.createdAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: msg.createdAt.toISOString(),
       read: msg.read,
     }));
 
@@ -64,7 +64,7 @@ const sendMessage = async (req, res) => {
       senderName: populated.senderId.name,
       receiverId: populated.receiverId.toString(),
       content: populated.text,
-      timestamp: populated.createdAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: populated.createdAt.toISOString(),
       read: populated.read,
     };
 

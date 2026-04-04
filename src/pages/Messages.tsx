@@ -32,6 +32,15 @@ export default function Messages() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const contactParam = searchParams.get("contact");
 
+  // Format ISO timestamp to user's local time
+  const formatTime = (iso: string) => {
+    try {
+      return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
+    } catch {
+      return iso;
+    }
+  };
+
   if (!isAuthenticated) return <Navigate to="/login" />;
 
   // Fetch contacts
@@ -267,7 +276,7 @@ export default function Messages() {
                           : "bg-secondary rounded-bl-md"
                       }`}>
                         <p>{msg.content}</p>
-                        <p className={`text-[10px] mt-1 ${msg.senderId === user?.id ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{msg.timestamp}</p>
+                        <p className={`text-[10px] mt-1 ${msg.senderId === user?.id ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{formatTime(msg.timestamp)}</p>
                       </div>
                     </div>
                   ))
