@@ -144,7 +144,7 @@ const steps = [
 ];
 
 const testimonials = [
-  { name: "Priya Sharma",  title: "Frontend Engineer · Groww",    init: "PS", col: "#6366f1", quote: "Dev HireX got me hired in just 2 weeks. The real-time alerts kept me on top of every update." },
+  { name: "Priya Sharma",  title: "Frontend Engineer · Groww",    init: "PS", col: "#6366f1", quote: "DevHireX got me hired in just 2 weeks. The real-time alerts kept me on top of every update." },
   { name: "Aryan Mehta",   title: "Recruiter · Razorpay",         init: "AM", col: "#0ea5e9", quote: "The quality of candidates is phenomenal. Verified, motivated, and highly skilled developers."  },
   { name: "Sneha Joshi",   title: "Backend Engineer · Zepto",     init: "SJ", col: "#10b981", quote: "The direct chat feature changed everything. I was talking to the CTO on my very first day."    },
 ];
@@ -248,7 +248,7 @@ export default function Landing() {
         <div className="container">
           <div ref={f.ref} className={`text-center mb-14 transition-all duration-700 ${f.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <p className="text-sm font-semibold text-indigo-600 uppercase tracking-widest mb-3">Platform Features</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Why <span style={{ backgroundImage: "linear-gradient(135deg, #6366f1, #8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Dev HireX</span>?</h2>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Why <span style={{ backgroundImage: "linear-gradient(135deg, #6366f1, #8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>DevHireX</span>?</h2>
             <p className="text-gray-500 text-lg max-w-xl mx-auto">Everything you need to hire or get hired at the fastest-growing startups. Results, not noise.</p>
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -374,7 +374,7 @@ export default function Landing() {
             <div className="relative z-10">
               <p className="text-sm font-semibold text-indigo-400 uppercase tracking-widest mb-4">🚀 Free to get started</p>
               <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">Ready to Launch Your Career?</h2>
-              <p className="text-slate-400 text-lg max-w-md mx-auto mb-10">Join 12,000+ developers and 500+ startups already connecting on Dev HireX.</p>
+              <p className="text-slate-400 text-lg max-w-md mx-auto mb-10">Join 12,000+ developers and 500+ startups already connecting on DevHireX.</p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/signup">
                   <button className="inline-flex items-center gap-2 rounded-xl px-10 py-4 text-base font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-2xl"
@@ -401,9 +401,9 @@ export default function Landing() {
               style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
               D
             </div>
-            <span className="text-base font-bold text-gray-900">Dev HireX</span>
+            <span className="text-base font-bold text-gray-900">DevHireX</span>
           </div>
-          <p className="text-sm text-gray-400">© 2024 Dev HireX. All rights reserved. Built with ❤️ for developers.</p>
+          <p className="text-sm text-gray-400">© 2024 DevHireX. All rights reserved. Built with ❤️ for developers.</p>
           <div className="flex gap-6 text-sm text-gray-400">
             <a href="#" className="hover:text-gray-700 transition-colors">Privacy</a>
             <a href="#" className="hover:text-gray-700 transition-colors">Terms</a>

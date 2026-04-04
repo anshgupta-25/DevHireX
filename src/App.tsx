@@ -13,6 +13,7 @@ import JobDetail from "./pages/JobDetail";
 import Dashboard from "./pages/Dashboard";
 import Messages from "./pages/Messages";
 import NotFound from "./pages/NotFound";
+import { LogoIcon } from "@/components/Logo";
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -29,12 +30,10 @@ function AppInner() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 rounded-xl gradient-primary flex items-center justify-center">
-            <svg className="h-6 w-6 text-white animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2" />
-            </svg>
+          <div className="h-14 w-14 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 shadow-lg flex items-center justify-center">
+            <LogoIcon className="h-8 w-8 text-white animate-pulse" />
           </div>
-          <p className="text-sm text-muted-foreground font-medium">Dev HireX</p>
+          <p className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-900 to-purple-900">DevHireX</p>
         </div>
       </div>
     );

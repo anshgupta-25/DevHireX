@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Briefcase } from "lucide-react";
+import { LogoIcon } from "@/components/Logo";
 import { useToast } from "@/hooks/use-toast";
 import type { UserRole } from "@/lib/types";
 
@@ -52,11 +52,11 @@ export default function Login() {
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
       <Card className="w-full max-w-md border-border/50">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl gradient-primary">
-            <Briefcase className="h-5 w-5 text-primary-foreground" />
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 shadow-md">
+            <LogoIcon className="h-7 w-7 text-white" />
           </div>
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your Dev HireX account</CardDescription>
+          <CardTitle className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-900 to-purple-900">Welcome Back</CardTitle>
+          <CardDescription>Sign in to your DevHireX account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
