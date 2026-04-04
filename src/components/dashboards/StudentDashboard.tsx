@@ -241,14 +241,17 @@ export default function StudentDashboard() {
                     <Briefcase className="h-4 w-4" /> View Job
                   </Button>
                 </Link>
-                <Button className="flex-1 gradient-primary border-0 text-primary-foreground gap-2" onClick={() => {
-                  toast({
-                    title: "Coming Soon",
-                    description: "Direct messaging with recruiters will be available soon!",
-                  });
-                }}>
-                  <Send className="h-4 w-4" /> Message
-                </Button>
+                {selectedApp.recruiterId ? (
+                  <Link to={`/messages?contact=${selectedApp.recruiterId}`} className="flex-1">
+                    <Button className="w-full gradient-primary border-0 text-primary-foreground gap-2">
+                      <Send className="h-4 w-4" /> Message
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button className="flex-1 gradient-primary border-0 text-primary-foreground gap-2" disabled>
+                    <Send className="h-4 w-4" /> Message
+                  </Button>
+                )}
               </div>
             </div>
           )}

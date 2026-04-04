@@ -41,6 +41,7 @@ export interface Application {
   status: "Applied" | "Shortlisted" | "Interview" | "Offered" | "Rejected";
   appliedAt: string;
   skills: string[];
+  recruiterId?: string;
 }
 
 export interface Message {

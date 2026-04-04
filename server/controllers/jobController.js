@@ -1,6 +1,7 @@
 const Job = require("../models/Job");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
+const Application = require("../models/Application");
 
 // @desc    Get all jobs (with optional search/filter)
 // @route   GET /api/jobs
@@ -171,10 +172,13 @@ const deleteJob = async (req, res) => {
 
     await job.deleteOne();
 
-    // Optionally: could delete corresponding applications & notifications here
-    // But letting them exist or cascade is a longer term fix. For now, just deleting the job.
+    // 2. Cascade delete applications for this job
+    await Application.deleteMany({ jobId: job._id });
 
-    res.json({ message: "Job removed" });
+    // 3. (Optional) Could delete notifications referencing this job,
+    // but without explicit entityIds, it's safer to just delete applications.
+
+    res.json({ message: "Job and associated applications removed" });
   } catch (error) {
     console.error("Delete job error:", error);
     res.status(500).json({ message: "Server error deleting job" });

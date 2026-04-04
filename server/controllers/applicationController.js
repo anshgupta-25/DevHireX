@@ -80,7 +80,7 @@ const getApplications = async (req, res) => {
 
     if (req.user.role === "student") {
       applications = await Application.find({ userId: req.user._id })
-        .populate("jobId", "title company skills")
+        .populate("jobId", "title company skills createdBy")
         .populate("userId", "name skills avatar")
         .sort({ createdAt: -1 });
     } else if (req.user.role === "recruiter") {
@@ -105,6 +105,7 @@ const getApplications = async (req, res) => {
       jobId: app.jobId?._id?.toString() || "",
       jobTitle: app.jobId?.title || "",
       company: app.jobId?.company || "",
+      recruiterId: app.jobId?.createdBy?.toString() || "",
       studentId: app.userId?._id?.toString() || "",
       studentName: app.userId?.name || "",
       studentAvatar: app.userId?.avatar || "",

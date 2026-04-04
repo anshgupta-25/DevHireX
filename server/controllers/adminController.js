@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const Job = require("../models/Job");
 const Application = require("../models/Application");
+const Notification = require("../models/Notification");
+const Message = require("../models/Message");
 
 // @desc    Get platform stats
 // @route   GET /api/admin/stats
@@ -49,11 +51,39 @@ const getUsers = async (req, res) => {
 // @route   DELETE /api/admin/users/:id
 const deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.json({ message: "User deleted" });
+
+    // 1. Delete all applications made by this user
+    await Application.deleteMany({ userId: user._id });
+
+    // 2. Delete all messages sent or received by this user
+    await Message.deleteMany({
+      $or: [{ senderId: user._id }, { receiverId: user._id }],
+    });
+
+    // 3. Delete all notifications for this user
+    await Notification.deleteMany({ userId: user._id });
+
+    // 4. If the user is a recruiter, delete all their jobs and the applications for those jobs
+    if (user.role === "recruiter") {
+      const jobs = await Job.find({ createdBy: user._id });
+      const jobIds = jobs.map((j) => j._id);
+      
+      // Delete applications for these jobs
+      await Application.deleteMany({ jobId: { $in: jobIds } });
+      
+      // Delete the jobs themselves
+      await Job.deleteMany({ createdBy: user._id });
+    }
+
+    // 5. Finally, delete the user
+    await user.deleteOne();
+
+    res.json({ message: "User and all related data deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Delete user error:", error);
+    res.status(500).json({ message: "Server error during user deletion" });
   }
 };
 
