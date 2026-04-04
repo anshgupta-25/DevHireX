@@ -154,4 +154,31 @@ const getJobById = async (req, res) => {
   }
 };
 
-module.exports = { getJobs, createJob, getJobById };
+// @desc    Delete a job
+// @route   DELETE /api/jobs/:id
+const deleteJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    // Allow admin to delete any job, restrict recruiters to their own jobs
+    if (req.user.role !== "admin" && job.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: "Not authorized to delete this job" });
+    }
+
+    await job.deleteOne();
+
+    // Optionally: could delete corresponding applications & notifications here
+    // But letting them exist or cascade is a longer term fix. For now, just deleting the job.
+
+    res.json({ message: "Job removed" });
+  } catch (error) {
+    console.error("Delete job error:", error);
+    res.status(500).json({ message: "Server error deleting job" });
+  }
+};
+
+module.exports = { getJobs, createJob, getJobById, deleteJob };
