@@ -32,13 +32,12 @@ export default function Messages() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const contactParam = searchParams.get("contact");
 
-  // Format ISO timestamp to user's local time
-  const formatTime = (iso: string) => {
-    try {
-      return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
-    } catch {
-      return iso;
-    }
+  // Format timestamp to user's local time — handles ISO strings AND old pre-formatted strings
+  const formatTime = (ts: string) => {
+    if (!ts) return "";
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return ts;
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
   };
 
   if (!isAuthenticated) return <Navigate to="/login" />;
@@ -157,8 +156,8 @@ export default function Messages() {
 
   const filteredContacts = searchQuery
     ? contacts.filter((c) =>
-        c.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      c.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     : contacts;
 
   if (!selected && !loadingContacts) {
@@ -270,11 +269,10 @@ export default function Messages() {
                 ) : (
                   messages.map((msg) => (
                     <div key={msg.id} className={`flex ${msg.senderId === user?.id ? "justify-end" : "justify-start"}`}>
-                      <div className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm ${
-                        msg.senderId === user?.id
+                      <div className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm ${msg.senderId === user?.id
                           ? "gradient-primary text-primary-foreground rounded-br-md"
                           : "bg-secondary rounded-bl-md"
-                      }`}>
+                        }`}>
                         <p>{msg.content}</p>
                         <p className={`text-[10px] mt-1 ${msg.senderId === user?.id ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{formatTime(msg.timestamp)}</p>
                       </div>
