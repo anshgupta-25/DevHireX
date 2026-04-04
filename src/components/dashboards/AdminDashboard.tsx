@@ -76,10 +76,10 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-        <StatCard title="Total Users" value={stats.totalUsers.toLocaleString()} change="+340 this month" icon={Users} trend="up" />
-        <StatCard title="Active Jobs" value={stats.totalJobs.toLocaleString()} change="+89 this week" icon={Briefcase} trend="up" />
-        <StatCard title="Total Hires" value={stats.totalHires.toLocaleString()} change="+42 this month" icon={TrendingUp} trend="up" />
-        <StatCard title="Reports" value={7} change="3 pending" icon={Shield} />
+        <StatCard title="Total Users" value={stats.totalUsers.toLocaleString()} icon={Users} />
+        <StatCard title="Active Jobs" value={stats.totalJobs.toLocaleString()} icon={Briefcase} />
+        <StatCard title="Total Applications" value={stats.totalApplications.toLocaleString()} icon={Shield} />
+        <StatCard title="Total Hires" value={stats.totalHires.toLocaleString()} icon={TrendingUp} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">

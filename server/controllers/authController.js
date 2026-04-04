@@ -46,17 +46,21 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Please provide email and password" });
     }
 
-    const query = { email };
+    const query = { email: email.toLowerCase().trim() };
     if (role) query.role = role;
 
+    console.log(`Login attempt for: email=${query.email}, role=${query.role}`);
+    
     const user = await User.findOne(query);
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      console.log(`User not found for query:`, query);
+      return res.status(401).json({ message: "Invalid credentials (User not found)" });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      console.log(`Password mismatch for user: ${user.email}`);
+      return res.status(401).json({ message: "Invalid credentials (Password mismatch)" });
     }
 
     const token = generateToken(user._id);
