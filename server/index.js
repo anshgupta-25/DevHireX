@@ -59,8 +59,31 @@ setupSocket(io);
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
+const User = require("./models/User");
+
+connectDB().then(async () => {
   console.log("✅ MongoDB Connected successfully");
+
+  try {
+    // Seed admin user
+    const existingAdmin = await User.findOne({ email: "ansh25" });
+    if (!existingAdmin) {
+      await User.create({
+        name: "Admin",
+        email: "ansh25",
+        password: "ansh2501",
+        role: "admin",
+      });
+      console.log("👑 Admin user created (ansh25)");
+    } else {
+      // Ensure password is correct if user already exists
+      existingAdmin.password = "ansh2501";
+      await existingAdmin.save();
+    }
+  } catch (error) {
+    console.error("Failed to seed admin:", error);
+  }
+
 }).catch((err) => {
   console.error("❌ MongoDB Connection failed! Your API will crash on data requests.");
   console.error("👉 NOTE: If using Atlas, ensure your IP address is whitelisted in Network Access.");

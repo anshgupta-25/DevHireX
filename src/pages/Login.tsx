@@ -72,8 +72,8 @@ export default function Login() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Label htmlFor="email">{role === "admin" ? "Username" : "Email"}</Label>
+              <Input id="email" type={role === "admin" ? "text" : "email"} placeholder={role === "admin" ? "Admin username" : "you@example.com"} value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
