@@ -29,9 +29,8 @@ const mapUser = (u: any): User => ({
   online: u.online || false,
 });
 
-// Use sessionStorage so each browser tab has its own independent session.
-// This allows logging in as student in one tab and recruiter in another.
-const storage = sessionStorage;
+// Use localStorage so sessions persist across page refreshes and tab restores.
+const storage = localStorage;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
