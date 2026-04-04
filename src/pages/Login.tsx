@@ -61,11 +61,10 @@ export default function Login() {
                     key={r.value}
                     type="button"
                     onClick={() => setRole(r.value)}
-                    className={`rounded-lg border p-3 text-center transition-all text-sm ${
-                      role === r.value
+                    className={`rounded-lg border p-3 text-center transition-all text-sm ${role === r.value
                         ? "border-primary bg-primary/5 text-primary"
                         : "border-border hover:border-primary/30"
-                    }`}
+                      }`}
                   >
                     <div className="font-medium">{r.label}</div>
                   </button>

@@ -140,9 +140,8 @@ export function Navbar() {
                       notifications.slice(0, 10).map((n) => (
                         <div
                           key={n.id}
-                          className={`px-4 py-3 border-b border-border/30 last:border-0 transition-colors ${
-                            n.read ? "" : "bg-primary/5"
-                          }`}
+                          className={`px-4 py-3 border-b border-border/30 last:border-0 transition-colors ${n.read ? "" : "bg-primary/5"
+                            }`}
                         >
                           <div className="flex items-start gap-2">
                             <Bell className={`h-3.5 w-3.5 mt-0.5 shrink-0 ${n.read ? "text-muted-foreground" : "text-primary"}`} />
