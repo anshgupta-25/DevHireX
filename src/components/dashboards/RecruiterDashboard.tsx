@@ -8,6 +8,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "@/lib/api";
 import { getSocket } from "@/lib/socket";
+import { getUploadUrl } from "@/lib/uploads";
 import type { Job, Application, Notification } from "@/lib/types";
 import PostJobModal from "./PostJobModal";
 import {
@@ -187,9 +188,17 @@ export default function RecruiterDashboard() {
                   onClick={() => setSelectedApp(app)}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-bold">
-                      {app.studentName.charAt(0)}
-                    </div>
+                    {app.studentAvatar ? (
+                      <img 
+                        src={getUploadUrl(app.studentAvatar)} 
+                        alt={app.studentName}
+                        className="h-8 w-8 rounded-full object-cover border border-border"
+                      />
+                    ) : (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-bold shrink-0">
+                        {app.studentName.charAt(0)}
+                      </div>
+                    )}
                     <div>
                       <p className="text-sm font-medium">{app.studentName}</p>
                       <p className="text-xs text-muted-foreground">for {app.jobTitle}</p>
@@ -317,9 +326,17 @@ export default function RecruiterDashboard() {
           {selectedApp && (
             <div className="py-4">
               <div className="flex items-center gap-4 mb-8 p-4 bg-secondary/30 rounded-xl border border-border/50">
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-black">
-                  {selectedApp.studentName.charAt(0)}
-                </div>
+                {selectedApp.studentAvatar ? (
+                  <img 
+                    src={getUploadUrl(selectedApp.studentAvatar)} 
+                    alt={selectedApp.studentName}
+                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-black shrink-0">
+                    {selectedApp.studentName.charAt(0)}
+                  </div>
+                )}
                 <div className="flex-1">
                   <h3 className="text-lg font-bold">{selectedApp.studentName}</h3>
                   <p className="text-sm text-muted-foreground">Applying for: {selectedApp.jobTitle}</p>

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Send, Search, Loader2, MessageSquare } from "lucide-react";
 import api from "@/lib/api";
 import { getSocket } from "@/lib/socket";
+import { getUploadUrl } from "@/lib/uploads";
 import type { Message } from "@/lib/types";
 
 interface Contact {
@@ -15,6 +16,7 @@ interface Contact {
   name: string;
   company: string;
   online: boolean;
+  avatar?: string;
   lastMsg: string;
   unread: number;
 }
@@ -221,9 +223,17 @@ export default function Messages() {
                   className={`w-full flex items-center gap-3 p-3 text-left transition-colors ${selected?.id === c.id ? "bg-secondary" : "hover:bg-secondary/50"}`}
                 >
                   <div className="relative">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                      {c.name.charAt(0)}
-                    </div>
+                    {c.avatar ? (
+                      <img 
+                        src={getUploadUrl(c.avatar)} 
+                        alt={c.name}
+                        className="h-9 w-9 rounded-full object-cover border border-border"
+                      />
+                    ) : (
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary shrink-0">
+                        {c.name.charAt(0)}
+                      </div>
+                    )}
                     {c.online && <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card bg-success" />}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -245,9 +255,17 @@ export default function Messages() {
             <>
               <div className="flex items-center gap-3 border-b px-4 py-3">
                 <div className="relative">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                    {selected.name.charAt(0)}
-                  </div>
+                  {selected.avatar ? (
+                    <img 
+                      src={getUploadUrl(selected.avatar)} 
+                      alt={selected.name}
+                      className="h-8 w-8 rounded-full object-cover border border-border"
+                    />
+                  ) : (
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary shrink-0">
+                      {selected.name.charAt(0)}
+                    </div>
+                  )}
                   {selected.online && <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-card bg-success" />}
                 </div>
                 <div>

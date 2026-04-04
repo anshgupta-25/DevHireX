@@ -37,6 +37,7 @@ export interface Application {
   company: string;
   studentId: string;
   studentName: string;
+  studentAvatar?: string;
   status: "Applied" | "Shortlisted" | "Interview" | "Offered" | "Rejected";
   appliedAt: string;
   skills: string[];

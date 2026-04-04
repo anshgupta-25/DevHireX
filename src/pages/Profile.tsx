@@ -73,7 +73,7 @@ const ROLE_CONFIG = {
     badgeClass: "bg-slate-100 text-slate-700 border-slate-200",
     icon: GraduationCap,
     label: "Student",
-    tagline: "Job Seeker",
+    tagline: "Student",
   },
   recruiter: {
     gradient: "from-slate-800 to-slate-900",
@@ -426,7 +426,7 @@ export default function Profile() {
                   </div>
                   <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/40">
                     <Award className="h-5 w-5 text-amber-500 shrink-0" />
-                    <div><p className="text-sm font-medium">Status</p><p className="text-xs text-muted-foreground">{profile.bio ? "Active job seeker" : "Open to opportunities"}</p></div>
+                    <div><p className="text-sm font-medium">Status</p><p className="text-xs text-muted-foreground">{profile.bio ? "Active student" : "Open to opportunities"}</p></div>
                   </div>
                 </div>
               </CardContent>

@@ -52,7 +52,7 @@ const applyToJob = async (req, res) => {
 
     const populated = await Application.findById(application._id)
       .populate("jobId", "title company")
-      .populate("userId", "name skills");
+      .populate("userId", "name skills avatar");
 
     res.status(201).json({
       id: populated._id.toString(),
@@ -61,6 +61,7 @@ const applyToJob = async (req, res) => {
       company: populated.jobId.company,
       studentId: populated.userId._id.toString(),
       studentName: populated.userId.name,
+      studentAvatar: populated.userId.avatar || "",
       status: populated.status,
       appliedAt: populated.createdAt.toISOString().split("T")[0],
       skills: populated.userId.skills || [],
@@ -80,7 +81,7 @@ const getApplications = async (req, res) => {
     if (req.user.role === "student") {
       applications = await Application.find({ userId: req.user._id })
         .populate("jobId", "title company skills")
-        .populate("userId", "name skills")
+        .populate("userId", "name skills avatar")
         .sort({ createdAt: -1 });
     } else if (req.user.role === "recruiter") {
       // Get recruiter's jobs first
@@ -89,13 +90,13 @@ const getApplications = async (req, res) => {
 
       applications = await Application.find({ jobId: { $in: jobIds } })
         .populate("jobId", "title company skills")
-        .populate("userId", "name skills")
+        .populate("userId", "name skills avatar")
         .sort({ createdAt: -1 });
     } else {
       // Admin sees all
       applications = await Application.find()
         .populate("jobId", "title company skills")
-        .populate("userId", "name skills")
+        .populate("userId", "name skills avatar")
         .sort({ createdAt: -1 });
     }
 
@@ -106,6 +107,7 @@ const getApplications = async (req, res) => {
       company: app.jobId?.company || "",
       studentId: app.userId?._id?.toString() || "",
       studentName: app.userId?.name || "",
+      studentAvatar: app.userId?.avatar || "",
       status: app.status,
       appliedAt: app.createdAt.toISOString().split("T")[0],
       skills: app.userId?.skills || [],
@@ -126,7 +128,7 @@ const updateApplicationStatus = async (req, res) => {
 
     const application = await Application.findById(req.params.id)
       .populate("jobId", "title company")
-      .populate("userId", "name");
+      .populate("userId", "name avatar");
 
     if (!application) {
       return res.status(404).json({ message: "Application not found" });

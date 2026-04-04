@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { UserRole } from "@/lib/types";
 
 const roles: { value: UserRole; label: string; desc: string }[] = [
-  { value: "student", label: "Job Seeker", desc: "Find your dream startup role" },
+  { value: "student", label: "Student", desc: "Find your dream startup role" },
   { value: "recruiter", label: "Recruiter", desc: "Hire top talent for your startup" },
   { value: "admin", label: "Admin", desc: "Manage the platform" },
 ];

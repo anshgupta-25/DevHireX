@@ -35,6 +35,7 @@ const getUsers = async (req, res) => {
       id: u._id.toString(),
       name: u.name,
       role: u.role,
+      avatar: u.avatar || "",
       email: u.email,
       status: "active",
     }));

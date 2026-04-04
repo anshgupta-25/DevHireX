@@ -117,7 +117,7 @@ const getContacts = async (req, res) => {
 
     const contactIds = Array.from(contactMap.keys());
     const users = await User.find({ _id: { $in: contactIds } }).select(
-      "name company online"
+      "name company online avatar"
     );
 
     const contacts = users.map((u) => {
@@ -127,6 +127,7 @@ const getContacts = async (req, res) => {
         name: u.name,
         company: u.company || "",
         online: u.online,
+        avatar: u.avatar || "",
         lastMsg: data?.lastMsg || "",
         unread: data?.unread || 0,
       };

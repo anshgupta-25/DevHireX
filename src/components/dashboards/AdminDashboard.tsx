@@ -22,6 +22,7 @@ import {
 import { Users, Briefcase, TrendingUp, Shield, Ban, Trash2, Loader2, PlusCircle, Eye, ExternalLink } from "lucide-react";
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
+import { getUploadUrl } from "@/lib/uploads";
 import type { Job } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 
@@ -30,6 +31,7 @@ interface AdminUser {
   name: string;
   role: string;
   email: string;
+  avatar?: string;
   status: string;
 }
 
@@ -52,12 +54,20 @@ function UserRow({ u, onDelete }: { u: AdminUser; onDelete: (id: string) => void
   return (
     <div className="flex items-center justify-between rounded-lg border border-border/50 p-3 hover:bg-secondary/30 transition-colors">
       <div className="flex items-center gap-3">
-        <div
-          className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
-          style={{ background: u.role === "admin" ? "#7c3aed" : u.role === "recruiter" ? "#2563eb" : "#16a34a" }}
-        >
-          {u.name.charAt(0).toUpperCase()}
-        </div>
+        {u.avatar ? (
+          <img 
+            src={getUploadUrl(u.avatar)} 
+            alt={u.name}
+            className="h-9 w-9 rounded-full object-cover border border-border"
+          />
+        ) : (
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white shrink-0"
+            style={{ background: u.role === "admin" ? "#7c3aed" : u.role === "recruiter" ? "#2563eb" : "#16a34a" }}
+          >
+            {u.name.charAt(0).toUpperCase()}
+          </div>
+        )}
         <div>
           <p className="text-sm font-medium leading-tight">{u.name}</p>
           <p className="text-xs text-muted-foreground">{u.email}</p>
