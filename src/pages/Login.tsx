@@ -49,7 +49,7 @@ export default function Login() {
             <Briefcase className="h-5 w-5 text-primary-foreground" />
           </div>
           <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your HireFlow account</CardDescription>
+          <CardDescription>Sign in to your Dev HireX account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

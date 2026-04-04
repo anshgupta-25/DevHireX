@@ -78,7 +78,7 @@ export default function Landing() {
       <section className="py-20 bg-secondary/30">
         <div className="container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">Why HireFlow?</h2>
+            <h2 className="text-3xl font-bold">Why Dev HireX?</h2>
             <p className="mt-3 text-muted-foreground max-w-lg mx-auto">Everything you need to hire or get hired at the fastest-growing startups.</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -140,7 +140,7 @@ export default function Landing() {
         <div className="container">
           <div className="rounded-2xl gradient-primary p-12 text-center">
             <h2 className="text-3xl font-bold text-primary-foreground">Ready to find your next opportunity?</h2>
-            <p className="mt-3 text-primary-foreground/80 max-w-md mx-auto">Join thousands of candidates and startups already on HireFlow.</p>
+            <p className="mt-3 text-primary-foreground/80 max-w-md mx-auto">Join thousands of candidates and startups already on Dev HireX.</p>
             <div className="mt-8 flex justify-center gap-3">
               <Link to="/signup">
                 <Button size="lg" variant="secondary" className="gap-2">
@@ -159,9 +159,9 @@ export default function Landing() {
             <div className="flex h-6 w-6 items-center justify-center rounded-md gradient-primary">
               <Briefcase className="h-3 w-3 text-primary-foreground" />
             </div>
-            <span className="font-semibold">HireFlow</span>
+            <span className="font-semibold">Dev HireX</span>
           </div>
-          <p className="text-sm text-muted-foreground">© 2024 HireFlow. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2024 Dev HireX. All rights reserved.</p>
         </div>
       </footer>
     </div>

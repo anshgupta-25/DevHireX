@@ -1,4 +1,4 @@
-# HireFlow — Setup Guide
+# Dev HireX — Setup Guide
 
 A full-stack MERN (MongoDB, Express, React, Node.js) hiring platform with real-time notifications and messaging.
 

@@ -50,7 +50,7 @@ export default function Signup() {
             <Briefcase className="h-5 w-5 text-primary-foreground" />
           </div>
           <CardTitle className="text-2xl">Create your account</CardTitle>
-          <CardDescription>Join HireFlow and start your journey</CardDescription>
+          <CardDescription>Join Dev HireX and start your journey</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

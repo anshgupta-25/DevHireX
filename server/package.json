@@ -1,7 +1,7 @@
 {
   "name": "hireflow-server",
   "version": "1.0.0",
-  "description": "HireFlow Backend API",
+  "description": "Dev HireX Backend API",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
