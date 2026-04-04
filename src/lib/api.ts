@@ -9,10 +9,10 @@ const api = axios.create({
   },
 });
 
-// Request interceptor: attach JWT token from sessionStorage (per-tab)
+// Request interceptor: attach JWT token from localStorage (persists across refreshes)
 api.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("hireflow_token");
+    const token = localStorage.getItem("devhirex_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

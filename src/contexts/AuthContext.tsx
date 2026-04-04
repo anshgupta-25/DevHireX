@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Restore session on mount
   useEffect(() => {
     const restoreSession = async () => {
-      const token = storage.getItem("hireflow_token");
+      const token = storage.getItem("devhirex_token");
       if (token) {
         try {
           const res = await api.get("/api/auth/me");
@@ -47,8 +47,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(mappedUser);
           connectSocket(mappedUser.id);
         } catch {
-          storage.removeItem("hireflow_token");
-          storage.removeItem("hireflow_user");
+          storage.removeItem("devhirex_token");
+          storage.removeItem("devhirex_user");
         }
       }
       setLoading(false);
@@ -58,8 +58,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(() => {
     setUser(null);
-    storage.removeItem("hireflow_token");
-    storage.removeItem("hireflow_user");
+    storage.removeItem("devhirex_token");
+    storage.removeItem("devhirex_user");
     disconnectSocket();
   }, []);
 
@@ -88,20 +88,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(async (email: string, password: string, role: UserRole) => {
     const res = await api.post("/api/auth/login", { email, password, role });
     const { token, user: u } = res.data;
-    storage.setItem("hireflow_token", token);
+    storage.setItem("devhirex_token", token);
     const mappedUser = mapUser({ ...u, online: true });
     setUser(mappedUser);
-    storage.setItem("hireflow_user", JSON.stringify(mappedUser));
+    storage.setItem("devhirex_user", JSON.stringify(mappedUser));
     connectSocket(mappedUser.id);
   }, []);
 
   const signup = useCallback(async (name: string, email: string, password: string, role: UserRole, company?: string) => {
     const res = await api.post("/api/auth/signup", { name, email, password, role, company });
     const { token, user: u } = res.data;
-    storage.setItem("hireflow_token", token);
+    storage.setItem("devhirex_token", token);
     const mappedUser = mapUser({ ...u, online: true });
     setUser(mappedUser);
-    storage.setItem("hireflow_user", JSON.stringify(mappedUser));
+    storage.setItem("devhirex_user", JSON.stringify(mappedUser));
     connectSocket(mappedUser.id);
   }, []);
 

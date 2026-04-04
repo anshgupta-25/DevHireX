@@ -111,8 +111,12 @@ export default function AdminDashboard() {
       setStats(statsRes.data);
       setUsers(usersRes.data);
       setJobs(jobsRes.data);
-    } catch {
-      // handle silently
+    } catch (error: any) {
+      toast({
+        title: "Admin Sync Failed",
+        description: error.response?.data?.message || "Could not retrieve platform data. Check your connection.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
