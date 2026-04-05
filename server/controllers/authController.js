@@ -121,6 +121,11 @@ const googleAuth = async (req, res) => {
         role: role || "student",
       });
     } else {
+      // Security check: restrict role switching cross-portals
+      if (role && user.role !== role) {
+        return res.status(401).json({ message: `Access denied. This email is registered as a ${user.role}. Please log in via the ${user.role.charAt(0).toUpperCase() + user.role.slice(1)} portal.` });
+      }
+
       // Existing user — update avatar if they have a Google photo and no local one
       if (profileImage && !user.avatar) {
         user.avatar = profileImage;
