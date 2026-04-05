@@ -14,10 +14,9 @@ const profileRoutes = require("./routes/profile");
 const messageRoutes = require("./routes/messages");
 const notificationRoutes = require("./routes/notifications");
 const adminRoutes = require("./routes/admin");
-const uploadRoutes = require("./routes/upload");
 const path = require("path");
-
-
+const { createRouteHandler } = require("uploadthing/express");
+const { uploadRouter } = require("./uploadthing");
 const app = express();
 const server = http.createServer(app);
 
@@ -49,7 +48,12 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/upload", uploadRoutes);
+app.use(
+  "/api/uploadthing",
+  createRouteHandler({
+    router: uploadRouter,
+  })
+);
 
 // Serve uploaded files as static
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

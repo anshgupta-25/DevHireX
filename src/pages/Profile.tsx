@@ -49,6 +49,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getUploadUrl } from "@/lib/uploads";
+import { useUploadThing } from "@/lib/uploadthing";
 
 interface UserProfile {
   _id: string;
@@ -101,8 +102,8 @@ export default function Profile() {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [uploadingResume, setUploadingResume] = useState(false);
+  const [uploadingAvatarState, setUploadingAvatarState] = useState(false);
+  const [uploadingResumeState, setUploadingResumeState] = useState(false);
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -123,22 +124,29 @@ export default function Profile() {
 
   const isOwnProfile = !id || id === authUser?.id;
 
+  const { startUpload: startAvatarUpload, isUploading: isUploadingAvatarUI } = useUploadThing("profileImage");
+  const { startUpload: startResumeUpload, isUploading: isUploadingResumeUI } = useUploadThing("resumeFile");
+
+  const uploadingAvatar = isUploadingAvatarUI || uploadingAvatarState;
+  const uploadingResume = isUploadingResumeUI || uploadingResumeState;
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'resume') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const formData = new FormData();
-    const endpoint = type === 'avatar' ? '/api/upload/profile-image' : '/api/upload/resume';
-    const fieldName = type === 'avatar' ? 'profileImage' : 'resume';
-    formData.append(fieldName, file);
-
-    const setLoader = type === 'avatar' ? setUploadingAvatar : setUploadingResume;
+    const setLoader = type === 'avatar' ? setUploadingAvatarState : setUploadingResumeState;
     setLoader(true);
 
     try {
-      const res = await api.post(endpoint, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const startUpload = type === 'avatar' ? startAvatarUpload : startResumeUpload;
+      const uploadRes = await startUpload([file]);
+      if (!uploadRes || uploadRes.length === 0) throw new Error("UploadFailed");
+
+      const fileUrl = uploadRes[0].url;
+      const fieldName = type === 'avatar' ? 'avatar' : 'resume';
+      
+      const payload = { ...form, [fieldName]: fileUrl, skills: form.skills.split(",").map((s) => s.trim()).filter(Boolean) };
+      const res = await api.put("/api/profile", payload);
       
       const updatedUser = res.data.user;
       setProfile(updatedUser);
@@ -147,11 +155,11 @@ export default function Profile() {
         updateUser(updatedUser);
       }
       
-      toast({ title: "Success", description: res.data.message });
+      toast({ title: "Success", description: "File uploaded successfully!" });
     } catch (err: any) {
       toast({
         title: "Upload Failed",
-        description: err.response?.data?.message || "There was an error uploading the file.",
+        description: err.message || "There was an error uploading the file.",
         variant: "destructive"
       });
     } finally {
