@@ -104,7 +104,9 @@ export function Navbar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-600 shadow-md">
             <LogoIcon className="h-5 w-5 text-white" />
           </div>
-          <span className="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-900 to-purple-900 dark:from-indigo-100 dark:to-purple-100">DevHireX</span>
+          <span className="text-xl font-black tracking-tight text-gray-900 dark:text-white">
+            DevHire<span className="text-[#6366f1]">X</span>
+          </span>
         </Link>
 
         {isAuthenticated && user ? (
@@ -250,17 +252,23 @@ export function Navbar() {
             </div>
           </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <Link to="/jobs">
-              <Button variant="ghost" size="sm">Browse Jobs</Button>
-            </Link>
-            <Link to="/login">
-              <Button variant="ghost" size="sm">Log in</Button>
-            </Link>
-            <Link to="/signup">
-              <Button size="sm">Get Started</Button>
-            </Link>
-          </div>
+          <>
+            <div className="hidden md:flex flex-1 items-center justify-center gap-8 text-sm font-medium text-gray-500">
+              <Link to="/jobs" className="hover:text-gray-900 transition-colors">Jobs</Link>
+              <a href="#features" className="hover:text-gray-900 transition-colors">Features</a>
+              <a href="#process" className="hover:text-gray-900 transition-colors">How it Works</a>
+            </div>
+            <div className="flex items-center gap-6">
+              <Link to="/login" className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">
+                Log in
+              </Link>
+              <Link to="/signup">
+                <Button className="bg-[#6366f1] hover:bg-indigo-600 border-0 rounded-xl px-6 h-10 shadow-md text-white font-semibold">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          </>
         )}
       </div>
     </nav>
