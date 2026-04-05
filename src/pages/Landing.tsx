@@ -237,19 +237,6 @@ export default function Landing() {
               <div className="text-xs text-gray-500 font-medium tracking-wide">Avg. rating</div>
             </div>
           </motion.div>
-
-          <motion.div 
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             transition={{ duration: 1, delay: 1.2 }}
-             className="absolute bottom-10 left-1/2 -translate-x-1/2 w-6 h-10 border-2 border-purple-200 rounded-full flex justify-center p-1"
-          >
-             <motion.div 
-               animate={{ y: [0, 10, 0] }}
-               transition={{ repeat: Infinity, duration: 2 }}
-               className="w-1.5 h-2 bg-purple-400 rounded-full"
-             />
-          </motion.div>
         </div>
       </section>
 
