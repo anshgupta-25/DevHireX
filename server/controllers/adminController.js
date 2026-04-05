@@ -3,6 +3,18 @@ const Job = require("../models/Job");
 const Application = require("../models/Application");
 const Notification = require("../models/Notification");
 const Message = require("../models/Message");
+const fs = require("fs");
+const path = require("path");
+
+const deleteFile = (filePath) => {
+  if (!filePath) return;
+  const fullPath = path.join(__dirname, "..", filePath);
+  if (fs.existsSync(fullPath)) {
+    fs.unlink(fullPath, (err) => {
+      if (err) console.error(`Error deleting file ${fullPath}:`, err);
+    });
+  }
+};
 
 // @desc    Get platform stats
 // @route   GET /api/admin/stats
@@ -77,7 +89,11 @@ const deleteUser = async (req, res) => {
       await Job.deleteMany({ createdBy: user._id });
     }
 
-    // 5. Finally, delete the user
+    // 5. Delete physical files (Avatar & Resume)
+    if (user.avatar) deleteFile(`uploads/profile-images/${user.avatar}`);
+    if (user.resume) deleteFile(`uploads/resumes/${user.resume}`);
+
+    // 6. Finally, delete the user
     await user.deleteOne();
 
     res.json({ message: "User and all related data deleted successfully" });
