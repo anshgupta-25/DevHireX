@@ -103,6 +103,7 @@ const getContacts = async (req, res) => {
       if (!contactMap.has(contactId)) {
         contactMap.set(contactId, {
           lastMsg: msg.text,
+          lastMsgAt: msg.createdAt,
           unread:
             msg.receiverId.toString() === userId.toString() && !msg.read ? 1 : 0,
         });
@@ -120,18 +121,21 @@ const getContacts = async (req, res) => {
       "name company online avatar"
     );
 
-    const contacts = users.map((u) => {
-      const data = contactMap.get(u._id.toString());
-      return {
-        id: u._id.toString(),
-        name: u.name,
-        company: u.company || "",
-        online: u.online,
-        avatar: u.avatar || "",
-        lastMsg: data?.lastMsg || "",
-        unread: data?.unread || 0,
-      };
-    });
+    const contacts = users
+      .map((u) => {
+        const data = contactMap.get(u._id.toString());
+        return {
+          id: u._id.toString(),
+          name: u.name,
+          company: u.company || "",
+          online: u.online,
+          avatar: u.avatar || "",
+          lastMsg: data?.lastMsg || "",
+          lastMsgAt: data?.lastMsgAt ? data.lastMsgAt.toISOString() : "",
+          unread: data?.unread || 0,
+        };
+      })
+      .sort((a, b) => new Date(b.lastMsgAt).getTime() - new Date(a.lastMsgAt).getTime());
 
     res.json(contacts);
   } catch (error) {

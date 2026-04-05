@@ -18,6 +18,7 @@ interface Contact {
   online: boolean;
   avatar?: string;
   lastMsg: string;
+  lastMsgAt: string;
   unread: number;
 }
 
@@ -67,6 +68,7 @@ export default function Messages() {
                 company: userRes.data.user.company || "",
                 online: userRes.data.user.online || false,
                 lastMsg: "",
+                lastMsgAt: new Date().toISOString(),
                 unread: 0,
               };
               setContacts((prev) => [newContact, ...prev]);
@@ -116,14 +118,15 @@ export default function Messages() {
       if (msg.senderId === selected?.id) {
         setMessages((prev) => [...prev, msg]);
       }
-      // Update the contacts list last message
-      setContacts((prev) =>
-        prev.map((c) =>
+      // Update the contacts list last message and re-sort
+      setContacts((prev) => {
+        const updated = prev.map((c) =>
           c.id === msg.senderId
-            ? { ...c, lastMsg: msg.content, unread: c.id === selected?.id ? c.unread : c.unread + 1 }
+            ? { ...c, lastMsg: msg.content, lastMsgAt: msg.timestamp, unread: c.id === selected?.id ? c.unread : c.unread + 1 }
             : c
-        )
-      );
+        );
+        return [...updated].sort((a, b) => new Date(b.lastMsgAt).getTime() - new Date(a.lastMsgAt).getTime());
+      });
     };
 
     socket.on("newMessage", handleNewMessage);
@@ -146,10 +149,13 @@ export default function Messages() {
         text: newMsg,
       });
       setMessages((prev) => [...prev, res.data]);
-      // Update contact's last message
-      setContacts((prev) =>
-        prev.map((c) => (c.id === selected.id ? { ...c, lastMsg: newMsg } : c))
-      );
+      // Update contact's last message, timestamp and re-sort
+      setContacts((prev) => {
+        const updated = prev.map((c) => 
+          c.id === selected.id ? { ...c, lastMsg: newMsg, lastMsgAt: res.data.timestamp } : c
+        );
+        return [...updated].sort((a, b) => new Date(b.lastMsgAt).getTime() - new Date(a.lastMsgAt).getTime());
+      });
       setNewMsg("");
     } catch {
       // Silently fail
