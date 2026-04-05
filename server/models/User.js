@@ -5,8 +5,13 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String, required: true },
+    password: { type: String, default: null },
     role: { type: String, enum: ["student", "recruiter", "admin"], default: "student" },
+    authProvider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+    },
     skills: [{ type: String }],
     resume: { type: String, default: "" },
     bio: { type: String, default: "" },
@@ -20,9 +25,9 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving
+// Hash password before saving (only for local auth users)
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.password || !this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();

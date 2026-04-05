@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { LogoIcon } from "@/components/Logo";
 import { useToast } from "@/hooks/use-toast";
+import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import type { UserRole } from "@/lib/types";
 
 const roles: { value: UserRole; label: string }[] = [
@@ -97,6 +98,15 @@ export default function Signup() {
             <Button type="submit" className="w-full gradient-primary border-0 text-primary-foreground" disabled={isLoading}>
               {isLoading ? "Creating Account..." : "Create Account"}
             </Button>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border/50" />
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-card px-3 text-muted-foreground">or continue with</span>
+              </div>
+            </div>
+            <GoogleAuthButton role={role} isNewUser={true} />
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link to="/login" className="text-primary hover:underline">Sign in</Link>

@@ -9,6 +9,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string, role: UserRole) => Promise<void>;
   signup: (name: string, email: string, password: string, role: UserRole, company?: string) => Promise<void>;
+  loginWithGoogle: (data: { name: string; email: string; profileImage: string; role: UserRole }) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   updateUser: (updates: Partial<User>) => void;
@@ -26,6 +27,7 @@ const mapUser = (u: any): User => ({
   location: u.location || "",
   experience: u.experience || "",
   company: u.company || "",
+  // avatar can be a filename (/uploads/...) or a full Google URL (https://...)
   avatar: u.avatar || "",
   resume: u.resume || "",
   online: u.online || false,
@@ -108,6 +110,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     connectSocket(mappedUser.id);
   }, []);
 
+  const loginWithGoogle = useCallback(async (data: { name: string; email: string; profileImage: string; role: UserRole }) => {
+    const res = await api.post("/api/auth/google", data);
+    const { token, user: u } = res.data;
+    storage.setItem("devhirex_token", token);
+    const mappedUser = mapUser({ ...u, online: true });
+    setUser(mappedUser);
+    storage.setItem("devhirex_user", JSON.stringify(mappedUser));
+    connectSocket(mappedUser.id);
+  }, []);
+
   const signup = useCallback(async (name: string, email: string, password: string, role: UserRole, company?: string) => {
     const res = await api.post("/api/auth/signup", { name, email, password, role, company });
     const { token, user: u } = res.data;
@@ -132,7 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, signup, logout, switchRole, updateUser }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, signup, loginWithGoogle, logout, switchRole, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

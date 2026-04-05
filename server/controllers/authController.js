@@ -98,4 +98,47 @@ const getMe = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, getMe };
+// @desc    Google OAuth sign-in / sign-up
+// @route   POST /api/auth/google
+const googleAuth = async (req, res) => {
+  try {
+    const { name, email, profileImage, role } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    let user = await User.findOne({ email: email.toLowerCase().trim() });
+
+    if (!user) {
+      // New user — create with Google auth provider
+      user = await User.create({
+        name: name || "Google User",
+        email: email.toLowerCase().trim(),
+        password: null,
+        authProvider: "google",
+        avatar: profileImage || "",
+        role: role || "student",
+      });
+    } else {
+      // Existing user — update avatar if they have a Google photo and no local one
+      if (profileImage && !user.avatar) {
+        user.avatar = profileImage;
+        await user.save();
+      }
+    }
+
+    // Generate JWT (no tokenVersion bump needed for Google users)
+    const token = generateToken(user._id, user.tokenVersion || 0);
+
+    res.json({
+      token,
+      user: user.toJSON(),
+    });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    res.status(500).json({ message: "Server error during Google authentication" });
+  }
+};
+
+module.exports = { signup, login, getMe, googleAuth };
