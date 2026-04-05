@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
     company: { type: String, default: "" },
     avatar: { type: String, default: "" },
     online: { type: Boolean, default: false },
+    tokenVersion: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

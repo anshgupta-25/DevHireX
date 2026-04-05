@@ -103,6 +103,9 @@ export default function AdminDashboard() {
   const [viewUsersOpen, setViewUsersOpen] = useState(false);
   const [viewJobsOpen, setViewJobsOpen] = useState(false);
   const [createUserOpen, setCreateUserOpen] = useState(false);
+  
+  const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
+  const [deleteJobId, setDeleteJobId] = useState<string | null>(null);
 
   // Create user form
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "student", company: "" });
@@ -139,6 +142,7 @@ export default function AdminDashboard() {
       await api.delete(`/api/admin/users/${userId}`);
       setUsers((prev) => prev.filter((u) => u.id !== userId));
       toast({ title: "User removed", description: "The user has been deleted from the platform." });
+      setDeleteUserId(null);
     } catch {
       toast({ title: "Error", description: "Could not delete user.", variant: "destructive" });
     }
@@ -149,6 +153,7 @@ export default function AdminDashboard() {
       await api.delete(`/api/jobs/${jobId}`);
       setJobs((prev) => prev.filter((j) => j.id !== jobId));
       toast({ title: "Job removed", description: "The job listing has been removed." });
+      setDeleteJobId(null);
     } catch {
       toast({ title: "Error", description: "Could not remove job.", variant: "destructive" });
     }
@@ -214,7 +219,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             {users.slice(0, 4).map((u) => (
-              <UserRow key={u.id} u={u} onDelete={handleDeleteUser} />
+              <UserRow key={u.id} u={u} onDelete={setDeleteUserId} />
             ))}
             {users.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-4">No users found.</p>
@@ -239,7 +244,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs px-2 py-0.5 rounded-full border font-medium bg-green-100 text-green-700 border-green-200">Active</span>
-                  <Button variant="ghost" size="sm" className="text-destructive text-xs h-7 px-2" onClick={() => handleRemoveJob(job.id)}>
+                  <Button variant="ghost" size="sm" className="text-destructive text-xs h-7 px-2" onClick={() => setDeleteJobId(job.id)}>
                     Remove
                   </Button>
                 </div>
@@ -279,9 +284,7 @@ export default function AdminDashboard() {
               <TabsContent key={tab} value={tab} className="flex-1 overflow-y-auto space-y-2 pr-1">
                 {filterUsers(tab).length > 0 ? (
                   filterUsers(tab).map((u) => (
-                    <UserRow key={u.id} u={u} onDelete={(id) => {
-                      handleDeleteUser(id);
-                    }} />
+                    <UserRow key={u.id} u={u} onDelete={setDeleteUserId} />
                   ))
                 ) : (
                   <div className="text-center py-12 text-muted-foreground text-sm">
@@ -320,7 +323,7 @@ export default function AdminDashboard() {
                   <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
                     <ExternalLink className="h-3.5 w-3.5" />
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-destructive text-xs h-7 px-2" onClick={() => handleRemoveJob(job.id)}>
+                  <Button variant="ghost" size="sm" className="text-destructive text-xs h-7 px-2" onClick={() => setDeleteJobId(job.id)}>
                     Remove
                   </Button>
                 </div>
@@ -403,6 +406,56 @@ export default function AdminDashboard() {
               </Button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Confirm Delete User Dialog ── */}
+      <Dialog open={!!deleteUserId} onOpenChange={(open) => !open && setDeleteUserId(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this user? This action cannot be undone and will permanently remove all associated data.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-3 pt-4 border-t mt-2 flex-row-reverse">
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleteUserId) handleDeleteUser(deleteUserId);
+              }}
+            >
+              Confirm Delete
+            </Button>
+            <Button variant="outline" onClick={() => setDeleteUserId(null)}>
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Confirm Remove Job Dialog ── */}
+      <Dialog open={!!deleteJobId} onOpenChange={(open) => !open && setDeleteJobId(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Confirm Removal</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove this job listing? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-3 pt-4 border-t mt-2 flex-row-reverse">
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleteJobId) handleRemoveJob(deleteJobId);
+              }}
+            >
+              Confirm Remove
+            </Button>
+            <Button variant="outline" onClick={() => setDeleteJobId(null)}>
+              Cancel
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

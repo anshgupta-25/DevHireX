@@ -24,7 +24,12 @@ api.interceptors.request.use(
 // Response interceptor: pass errors through without forced redirects
 api.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  (error) => {
+    if (error.response?.status === 401 && error.response?.data?.message?.includes("session expired")) {
+      window.dispatchEvent(new CustomEvent("session_force_logout"));
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default api;

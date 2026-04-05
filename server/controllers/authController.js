@@ -63,7 +63,10 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials (Password mismatch)" });
     }
 
-    const token = generateToken(user._id);
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
+    await user.save();
+
+    const token = generateToken(user._id, user.tokenVersion);
 
     // Emit session_expired with the email to precisely control logout on the frontend
     const io = req.app.get("io");

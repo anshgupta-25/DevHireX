@@ -73,11 +73,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handleSessionExpired = (expiredEmail?: string) => {
       // Only log out if specifically targeting this user's email ID
       if (expiredEmail && user.email === expiredEmail) {
-        alert("You have been logged out because this account (Email ID) was logged in from another location.");
         logout();
+        window.location.href = "/login?expired=true";
       } else if (!expiredEmail) {
         // Fallback if the backend sends an empty emit for some reason
         logout();
+        window.location.href = "/login?expired=true";
       }
     };
     
@@ -86,6 +87,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       socket.off("session_expired", handleSessionExpired);
     };
   }, [user, logout]);
+
+  // Listen for API 401 force logout
+  useEffect(() => {
+    const handleForceLogout = () => {
+      logout();
+      window.location.href = "/login?expired=true";
+    };
+    window.addEventListener("session_force_logout", handleForceLogout);
+    return () => window.removeEventListener("session_force_logout", handleForceLogout);
+  }, [logout]);
 
   const login = useCallback(async (email: string, password: string, role: UserRole) => {
     const res = await api.post("/api/auth/login", { email, password, role });

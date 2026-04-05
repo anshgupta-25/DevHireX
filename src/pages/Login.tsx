@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,17 @@ export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("expired") === "true") {
+      toast({
+        title: "Session Expired",
+        description: "You have been logged out because this account was accessed from another device.",
+        variant: "destructive",
+      });
+    }
+  }, [searchParams, toast]);
 
   // Add useEffect to redirect if already authenticated
   useEffect(() => {

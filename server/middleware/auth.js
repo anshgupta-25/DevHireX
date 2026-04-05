@@ -20,6 +20,10 @@ const protect = async (req, res, next) => {
       return res.status(401).json({ message: "Not authorized, user not found" });
     }
 
+    if ((decoded.version || 0) !== (req.user.tokenVersion || 0)) {
+      return res.status(401).json({ message: "Not authorized, session expired (logged in from another device)" });
+    }
+
     next();
   } catch (error) {
     return res.status(401).json({ message: "Not authorized, token failed" });
@@ -40,8 +44,8 @@ const requireRole = (...roles) => {
 };
 
 // Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const generateToken = (id, version = 0) => {
+  return jwt.sign({ id, version }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 module.exports = { protect, requireRole, generateToken };
