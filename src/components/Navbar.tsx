@@ -14,6 +14,26 @@ export function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    if (window.location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          window.history.pushState(null, '', `/#${targetId}`);
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', `/#${targetId}`);
+      }
+    }
+  };
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
@@ -255,8 +275,8 @@ export function Navbar() {
           <>
             <div className="hidden md:flex flex-1 items-center justify-center gap-8 text-sm font-medium text-gray-500">
               <Link to="/jobs" className="hover:text-gray-900 transition-colors">Jobs</Link>
-              <a href="#features" className="hover:text-gray-900 transition-colors">Features</a>
-              <a href="#process" className="hover:text-gray-900 transition-colors">How it Works</a>
+              <a href="#features" onClick={(e) => handleNavClick(e, 'features')} className="hover:text-gray-900 transition-colors cursor-pointer">Features</a>
+              <a href="#process" onClick={(e) => handleNavClick(e, 'process')} className="hover:text-gray-900 transition-colors cursor-pointer">How it Works</a>
             </div>
             <div className="flex items-center gap-6">
               <Link to="/login" className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">
