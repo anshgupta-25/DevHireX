@@ -2,6 +2,9 @@
 
 A modern, full-stack MERN application designed to connect startups with top talent. This platform features distinct portals for **Students (Job Seekers)** and **Recruiters (Startups)**, allowing for real-time job posting, application tracking, and instant notifications.
 
+<img width="1467" height="763" alt="image" src="https://github.com/user-attachments/assets/e49101e0-4ba6-4887-978d-8d2d63465daf" />
+
+
 ## ✨ Features
 
 - **Role-Based Portals**: Dedicated environments for both Students and Recruiters.
