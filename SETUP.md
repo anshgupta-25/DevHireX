@@ -45,6 +45,10 @@ Edit `server/.env` and fill in your values:
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/hireflow?retryWrites=true&w=majority
 JWT_SECRET=any_random_secret_string_here
 PORT=5001
+
+# UploadThing (for file persistence)
+UPLOADTHING_SECRET=sk_live_...
+UPLOADTHING_APP_ID=...
 ```
 
 ### Getting a MongoDB URI
@@ -55,6 +59,18 @@ PORT=5001
 4. Go to **Network Access** → Add `0.0.0.0/0` to allow connections from anywhere (for development)
 5. Go to **Database** → Click **Connect** → Choose **Drivers** → Copy the connection string
 6. Replace `<password>` in the URI with your database user's password
+
+### 2a. Setup UploadThing
+1. Go to [UploadThing](https://uploadthing.com/) and create a free project.
+2. Go to **Dashboard** → **API Keys**.
+3. Copy **Secret Key** (`UPLOADTHING_SECRET`) and **App ID** (`UPLOADTHING_APP_ID`) to your `.env`.
+
+### 2b. Setup Firebase (Google Login)
+The project is configured to use Firebase for Google Authentication.
+1. Create a project at [Firebase Console](https://console.firebase.google.com/).
+2. Enable **Google Auth** in the Authentication section.
+3. Add a Web App to get your project credentials.
+4. Update `src/lib/firebase.ts` with your configuration if needed.
 
 ---
 
@@ -76,6 +92,7 @@ This will create the following accounts (all with password `password123`):
 | Recruiter | emily@novatech.com | password123 |
 | Recruiter | james@cloudpeak.com | password123 |
 | Admin | admin@hireflow.com | password123 |
+| **Super Admin** | **ansh25** | **ansh2501** |
 
 > **Note:** Seeding clears all existing data. Skip this step if you want to start fresh and register through the app.
 

@@ -5,13 +5,15 @@ A modern, full-stack MERN application designed to connect startups with top tale
 ## ✨ Features
 
 - **Role-Based Portals**: Dedicated environments for both Students and Recruiters.
-- **Robust Session Management**: Support for simultaneous tab-independent sessions (e.g., login as a Student in one tab and Recruiter in another without conflicts).
+- **Robust Session Management**: Support for simultaneous tab-independent sessions.
+- **Google Authentication**: Seamless one-click login powered by **Firebase**.
+- **Persistent File Storage**: Integrated with **UploadThing** for reliable resume and profile picture uploads.
 - **Real-Time Notifications (Socket.IO)**: 
   - Students are instantly notified when a new job is posted.
   - Recruiters are instantly notified when a student applies for a job.
-  - Students are instantly notified when their application status changes (Accepted/Rejected).
-- **Responsive UI/UX**: Built with modern aesthetics, dark mode, responsive layouts, and Tailwind CSS.
-- **Application Tracking**: Real-time status updates on submitted applications directly on the Student Dashboard.
+  - Students are instantly notified when their application status changes.
+- **Responsive UI/UX**: Built with modern aesthetics, dark mode, and Tailwind CSS.
+- **Application Tracking**: Real-time status updates on submitted applications.
 
 ## 🛠️ Tech Stack
 
@@ -19,14 +21,17 @@ A modern, full-stack MERN application designed to connect startups with top tale
 - React (Vite)
 - TypeScript
 - Tailwind CSS & shadcn/ui
+- **Firebase Auth** (Google Login)
+- **UploadThing** (File Management)
 - Socket.IO Client
 - Lucide React Icons
 
 **Backend:**
 - Node.js & Express
 - MongoDB (Mongoose & Atlas)
+- **UploadThing** (Storage Service)
 - Socket.IO (WebSockets)
-- JWT (JSON Web Tokens) Authentication
+- JWT Authentication
 
 ---
 
@@ -87,14 +92,15 @@ To deploy this correctly on the internet, you must host the **frontend** and **b
    - **Root Directory**: `server`
    - **Build Command**: `npm install`
    - **Start Command**: `npm start`
-4. Add your Environment Variables (`MONGO_URI`, `JWT_SECRET`, `PORT`).
+4. Add your Environment Variables (`MONGO_URI`, `JWT_SECRET`, `UPLOADTHING_SECRET`, `UPLOADTHING_APP_ID`, `PORT`).
 5. Click deploy and **copy the live URL** once finished.
 
 ### 2. Frontend Deployment (Vercel / Netlify)
 1. Import your GitHub repository to Vercel or Netlify.
-2. In the deployment settings, add the following Environment Variable:
-   - **Key**: `VITE_API_URL`
-   - **Value**: *(Paste your Render backend URL here - no trailing slashes!)*
+2. In the deployment settings, add the following Environment Variables:
+   - **Key**: `VITE_API_URL` → **Value**: *(Your Render URL)*
+   - **Key**: `VITE_UPLOADTHING_SECRET` & `VITE_UPLOADTHING_APP_ID`
+   - **Key**: `VITE_FIREBASE_API_KEY` (and other Firebase config keys if not hardcoded)
 3. Deploy the application.
 
 Your complete Full-Stack real-time application is now live!
