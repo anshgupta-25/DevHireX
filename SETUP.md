@@ -1,4 +1,4 @@
-# Dev HireX — Setup Guide
+# DevHirex — Setup Guide
 
 A full-stack MERN (MongoDB, Express, React, Node.js) hiring platform with real-time notifications and messaging.
 
@@ -19,7 +19,7 @@ A full-stack MERN (MongoDB, Express, React, Node.js) hiring platform with real-t
 ```bash
 # Clone the repo
 git clone <your-repo-url>
-cd talent-connect-85
+cd "DevHirex - Realtime Startup"
 
 # Install frontend dependencies
 npm install
@@ -122,7 +122,7 @@ Open **http://localhost:8080** in your browser.
 ## 5. Project Structure
 
 ```
-talent-connect-85/
+DevHirex - Realtime Startup/
 ├── src/                      # React frontend (Vite)
 │   ├── components/           # UI components
 │   │   ├── dashboards/       # Student, Recruiter, Admin dashboards

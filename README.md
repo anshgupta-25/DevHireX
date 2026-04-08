@@ -1,4 +1,4 @@
-# 🚀 Realtime Startup Hiring Platform
+# 🚀 DevHirex - Realtime Startup Platform
 
 A modern, full-stack MERN application designed to connect startups with top talent. This platform features distinct portals for **Students (Job Seekers)** and **Recruiters (Startups)**, allowing for real-time job posting, application tracking, and instant notifications.
 
@@ -47,7 +47,7 @@ A modern, full-stack MERN application designed to connect startups with top tale
 ### 2. Clone the Repository
 ```bash
 git clone https://github.com/anshgupta-25/Realtime-Startup-company-Hiring-platform.git
-cd Realtime-Startup-company-Hiring-platform
+cd "DevHirex - Realtime Startup"
 ```
 
 ### 3. Setup the Backend
