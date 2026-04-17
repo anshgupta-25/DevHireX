@@ -6,7 +6,7 @@ This document provides an analysis of the **Data Structures and Algorithms (DSA)
 
 ## 🔍 1. Search & Filtering Logic (Algorithms)
 
-### Job Search (Regex Search)
+### Job Search (Regex Searching)
 Our job search engine utilizes a **Regular Expression-based pattern matching** algorithm within MongoDB ($regex).
 -   **Mechanism:** Case-insensitive prefix/substring match.
 -   **Complexity:** $O(n)$ where $n$ is the number of jobs.
