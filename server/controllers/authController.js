@@ -129,11 +129,19 @@ const googleAuth = async (req, res) => {
       // Existing user — update avatar if they have a Google photo and no local one
       if (profileImage && !user.avatar) {
         user.avatar = profileImage;
-        await user.save();
+      }
+
+      // Bump tokenVersion to invalidate old sessions (same as email/password login)
+      user.tokenVersion = (user.tokenVersion || 0) + 1;
+      await user.save();
+
+      // Emit session_expired to disconnect any old sockets for this user
+      const io = req.app.get("io");
+      if (io) {
+        io.to(user._id.toString()).emit("session_expired", user.email);
       }
     }
 
-    // Generate JWT (no tokenVersion bump needed for Google users)
     const token = generateToken(user._id, user.tokenVersion || 0);
 
     res.json({

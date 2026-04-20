@@ -107,6 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const mappedUser = mapUser({ ...u, online: true });
     setUser(mappedUser);
     storage.setItem("devhirex_user", JSON.stringify(mappedUser));
+    disconnectSocket(); // clean up any existing socket before reconnecting
     connectSocket(mappedUser.id);
   }, []);
 
@@ -117,6 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const mappedUser = mapUser({ ...u, online: true });
     setUser(mappedUser);
     storage.setItem("devhirex_user", JSON.stringify(mappedUser));
+    disconnectSocket(); // clean up any existing socket before reconnecting
     connectSocket(mappedUser.id);
   }, []);
 
@@ -127,6 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const mappedUser = mapUser({ ...u, online: true });
     setUser(mappedUser);
     storage.setItem("devhirex_user", JSON.stringify(mappedUser));
+    disconnectSocket(); // clean up any existing socket before reconnecting
     connectSocket(mappedUser.id);
   }, []);
 

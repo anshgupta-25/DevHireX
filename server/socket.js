@@ -1,7 +1,7 @@
 const User = require("./models/User");
 
 const setupSocket = (io) => {
-  // Track online users
+  // Track online users: userId -> socketId
   const onlineUsers = new Map();
 
   io.on("connection", (socket) => {
@@ -10,6 +10,17 @@ const setupSocket = (io) => {
     // User joins with their userId
     socket.on("join", async (userId) => {
       if (!userId) return;
+
+      // Disconnect any previous socket for this user (prevents stale connections)
+      const existingSocketId = onlineUsers.get(userId);
+      if (existingSocketId && existingSocketId !== socket.id) {
+        const existingSocket = io.sockets.sockets.get(existingSocketId);
+        if (existingSocket) {
+          console.log(`🔄 Disconnecting old socket ${existingSocketId} for user ${userId}`);
+          existingSocket.disconnect(true);
+        }
+      }
+
       socket.join(userId);
       onlineUsers.set(userId, socket.id);
 

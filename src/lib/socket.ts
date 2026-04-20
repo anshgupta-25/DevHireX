@@ -16,9 +16,13 @@ export const getSocket = (): Socket => {
 
 export const connectSocket = (userId: string) => {
   const s = getSocket();
-  if (!s.connected) {
-    s.connect();
+
+  // If already connected, disconnect first to avoid stale/duplicate connections
+  if (s.connected) {
+    s.disconnect();
   }
+
+  s.connect();
   s.emit("join", userId);
   return s;
 };
