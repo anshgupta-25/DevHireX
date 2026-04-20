@@ -177,16 +177,9 @@ export default function RecruiterJobs() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-xl shadow-indigo-200">
-              <Briefcase className="h-8 w-8 text-white" />
-            </div>
-            <Loader2 className="h-6 w-6 animate-spin text-indigo-600 absolute -bottom-1 -right-1" />
-          </div>
-          <p className="text-sm text-muted-foreground font-medium">
-            Loading your jobs…
-          </p>
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground font-medium">Loading your jobs…</p>
         </div>
       </div>
     );
