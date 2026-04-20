@@ -48,7 +48,6 @@ export default function RecruiterDashboard() {
   const [showPostJob, setShowPostJob] = useState(false);
   
   // Modals state
-  const [viewAllJobsOpen, setViewAllJobsOpen] = useState(false);
   const [viewAllApplicantsOpen, setViewAllApplicantsOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
   const { toast } = useToast();
@@ -146,7 +145,7 @@ export default function RecruiterDashboard() {
         <Card className="border-border/50">
           <CardHeader className="flex-row items-center justify-between pb-4">
             <CardTitle className="text-lg">Your Job Postings</CardTitle>
-            <Button variant="ghost" size="sm" className="gap-1" onClick={() => setViewAllJobsOpen(true)}>
+            <Button variant="ghost" size="sm" className="gap-1" onClick={() => navigate("/recruiter/jobs")}>
               View All <ArrowRight className="h-3 w-3" />
             </Button>
           </CardHeader>
@@ -246,35 +245,7 @@ export default function RecruiterDashboard() {
         </CardContent>
       </Card>
 
-      {/* ── View All Jobs Dialog ── */}
-      <Dialog open={viewAllJobsOpen} onOpenChange={setViewAllJobsOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
-          <DialogHeader>
-            <DialogTitle>Your Job Postings ({myJobs.length})</DialogTitle>
-            <DialogDescription>Manage all the roles you've posted on DevHireX.</DialogDescription>
-          </DialogHeader>
-          <div className="flex-1 overflow-y-auto space-y-2 pr-1 py-4">
-            {myJobs.length > 0 ? (
-              myJobs.map((job) => (
-                <div key={job.id} className="flex items-center justify-between rounded-lg border border-border/50 p-3 hover:bg-secondary/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">
-                      {job.title.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{job.title}</p>
-                      <p className="text-xs text-muted-foreground">{job.location} · {job.type} · Posted {job.postedAt}</p>
-                    </div>
-                  </div>
-                  <Badge variant="secondary">{job.applicants} applicants</Badge>
-                </div>
-              ))
-            ) : (
-              <div className="text-center py-12 text-muted-foreground text-sm">No jobs posted yet.</div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
+
 
       {/* ── View All Applicants Dialog ── */}
       <Dialog open={viewAllApplicantsOpen} onOpenChange={setViewAllApplicantsOpen}>
