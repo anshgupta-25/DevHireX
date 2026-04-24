@@ -92,6 +92,8 @@ const getContacts = async (req, res) => {
       $or: [{ senderId: userId }, { receiverId: userId }],
     }).sort({ createdAt: -1 });
 
+    // 💡 VIVA DSA POINT: HASH MAP DATA STRUCTURE 
+    // Used to group messages by user in O(n) time, providing O(1) lookups instead of nested loops O(n^2)
     const contactMap = new Map();
 
     for (const msg of messages) {
@@ -135,6 +137,8 @@ const getContacts = async (req, res) => {
           unread: data?.unread || 0,
         };
       })
+      // 💡 VIVA DSA POINT: SORTING ALGORITHM
+      // Uses JavaScript's native sort (Timsort: O(n log n)) to order contacts by recency
       .sort((a, b) => new Date(b.lastMsgAt).getTime() - new Date(a.lastMsgAt).getTime());
 
     res.json(contacts);

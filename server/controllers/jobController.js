@@ -11,6 +11,7 @@ const getJobs = async (req, res) => {
     let query = {};
 
     if (search) {
+      // 💡 VIVA DSA POINT: REGEX SEARCH ALGORITHM (O(n) Time Complexity)
       query.$or = [
         { title: { $regex: search, $options: "i" } },
         { company: { $regex: search, $options: "i" } },
@@ -22,6 +23,7 @@ const getJobs = async (req, res) => {
     }
 
     if (skills) {
+      // 💡 VIVA DSA POINT: SET-BASED FILTERING (Intersection using MongoDB $in)
       const skillsArr = skills.split(",");
       query.skills = { $in: skillsArr };
     }
