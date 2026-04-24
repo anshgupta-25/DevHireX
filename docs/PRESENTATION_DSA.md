@@ -133,18 +133,24 @@ Finding an element within a data structure.
 This section breaks down how these textbook concepts power the actual features of our application!
 
 ### 🔍 Search & Filtering (Job Search)
+* **Location:** [`server/controllers/jobController.js`](../server/controllers/jobController.js)
+
 Our job search engine bridges standard algorithms with database-level optimization.
 *   **Regex Searching:** Instead of standard string iteration ($O(n \times m)$), we utilize MongoDB's `$regex` for substring matching.
 *   **Set-Based Filtering:** To match skills, we use the `$in` operator. This acts like mathematical Set Intersection ($O(k)$ where $k$ is the number of skills).
 *   **Why?** Pushing computation to the DB layer prevents loading thousands of objects into Node.js memory.
 
 ### 💬 Messaging System (Hash Maps & Timsort)
+* **Location:** [`server/controllers/messageController.js`](../server/controllers/messageController.js)
+
 The chat inbox dynamically groups messages and shows the latest one per user.
 *   **The Problem:** Iterating through all messages to group them using nested loops would take $O(n^2)$.
 *   **The DSA Solution (Hash Map):** We use a **JavaScript `Map`**. We iterate through messages exactly *once* ($O(n)$). We use the `userId` as the key. Accessing/updating the latest message takes $O(1)$. Total grouping time: $O(n)$.
 *   **The Sorting (Timsort):** Once grouped, we convert the map values to an array and sort them by recency using JS `.sort()`. Modern JS engines use **Timsort** ($O(u \log u)$ where $u$ is unique users).
 
 ### 🗄️ Database Level (B-Trees)
+* **Location:** [`server/models/Application.js`](../server/models/Application.js)
+
 Every document ID (`_id`) in MongoDB uses a **B-Tree Data Structure** under the hood.
 *   **Why?** If we want to find user profile `12345`, standard search takes $O(n)$. By indexing, the DB navigates a B-Tree, bringing the search time down to $O(\log n)$.
 *   **Compound Indexing:** We applied compound indexes on `(userId, jobId)` in Applications to guarantee an $O(1)$ check to prevent users from applying to the same job twice!
